@@ -1,6 +1,4 @@
 from functools import reduce
-import math
-import os
 import requests
 
 def calculateFuel(acc: int, mass: str):
@@ -9,12 +7,11 @@ def calculateFuel(acc: int, mass: str):
     while fuel > 0:
         moduleFuel += fuel
         fuel = getFuelPerMass(fuel)
-
     return acc + moduleFuel
 
 
 def getFuelPerMass(mass: str): 
-    return math.floor(int(mass)/3) - 2 
+    return (int(mass) // 3) - 2 
 
 
 if __name__== "__main__":
@@ -22,7 +19,8 @@ if __name__== "__main__":
     if response.status_code == 200:
         input = response.text.splitlines()
         total_fuel = reduce(calculateFuel, input,0)
-        print(total_fuel)
+        print("Fuel needed for takeoff is {0}".format(total_fuel))
+        
     else :
-        print("Could not tertieve data")
+        print("Could not retrieve data")
 
