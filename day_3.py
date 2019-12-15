@@ -36,26 +36,36 @@ if __name__== "__main__":
 
         trace = {}
 
+
+        # wire1 = Wire("R75,D30,R83,U83,L12,D49,R71,U7,L72".split(','))
+        # wire2 = Wire("U62,R66,U55,R34,D71,R55,D58,R83".split(','))
+        
         wire1 = Wire(input[0].split(","))
         wire2 = Wire(input[1].split(","))
 
         wire1.trace()
-        print("wire 1 traced")
         wire2.trace()
-        print("wire 2 traced")
-
+     
         trace1 = set(wire1.path)
         trace2 = set(wire2.path)
+
         intersections = list(trace1 & trace2)
      
         if(intersections):
             closestPoint = math.inf
 
             for (x, y) in intersections:
-                manhattanDistance = abs(x) + abs(y)
-                closestPoint = min(closestPoint, manhattanDistance)
-              
-            print("the closest intersection is {0} steps away".format(closestPoint))
+                # manhattanDistance = abs(x) + abs(y)
+                # closestPoint = min(closestPoint, manhattanDistance)
+                stepsWire1 = wire1.path.index((x, y)) + 1
+                stepsWire2 = wire2.path.index((x, y)) + 1 
+                totalSteps = stepsWire1 + stepsWire2
+
+                closestPoint = min(closestPoint, totalSteps)
+
+                
+                
+            print("the shortest intersection takes {0} steps.".format(closestPoint))
 
 
     else :
