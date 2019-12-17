@@ -3,7 +3,7 @@ import requests
 
 USER_INPUT = 1
 
-def addition(data: list, x:int , y: int, output:int):
+def addition(data: list, x:int , y: int,  output:int):
     # print("address {0} was set the value of {1} + {2}".format(output, x, y))
     data[output] = x + y
 
@@ -17,9 +17,7 @@ def store(data:list, adress:int):
     data[adress] = USER_INPUT
 
 def output(data:list, output: int ):
-    
-    print(data[output])
-    # print("------------------------\n")
+    print("- Diagnostic Code {0} - ".format(output))
 
 operations = {
     "1" : {
@@ -41,35 +39,28 @@ operations = {
 }
 
 def process(data:list, instruction:str, params: list):
-    args = [0, 0]
+    args = []
     modes = []
     opcode = instruction[-1:]
-    if len(instruction) != 1 and opcode != "3":
-        modes= (instruction.zfill(4))[:-2]
-  
-        modes = modes[::-1]
-        # print ("Instruction {0} with params {1} and modes {2} at {3}".format(instruction, args,modes,  params))   
-        for index, param in enumerate(params[:-1]):
-           
-            if modes[index] == "0":
-                args[index] = data[param]
-            elif modes[index] == "1":
-                args[index] = param
-    else: 
-        args[0] = params[0]
-      
-        if opcode == "4" or opcode == "3":
-            args[0] = params[0]
-        else:
-            args[0] = data[params[0]]
-            args[1] = data[params[1]]
+
+    modes = (instruction.zfill(5))[:-2]
+
+    modes = modes[::-1]
+    for index, param in enumerate(params):
+        if modes[index] == "0" and opcode != "3":
+            args.append(data[param])
+        else :
+            args.append(param)
+
+    # print ("Instruction {0} with params {1} and modes {2} at {3}".format(instruction, args,modes,  params))   
 
     operate(data, opcode, args,params)
 
 def operate(data: list, opcode:str, args:list, params:list):
-    if (opcode == "1" or opcode == "2"):
-        operations[opcode]["action"](data, args[0], args[1], params[2])
-    elif opcode == "3" or opcode == "4":
+    
+    if len(args) == 3:
+        operations[opcode]["action"](data, args[0], args[1], params[2],)
+    else:
         operations[opcode]["action"](data, args[0])    
  
     
@@ -99,6 +90,7 @@ if __name__== "__main__":
         data = [int(i) for i in data]
         # data = [1001,1,2,4,33, 0]
         run (data)
-        print(data)
+        # answer was 16209841
     else :
         print("Could not retrieve data")
+
